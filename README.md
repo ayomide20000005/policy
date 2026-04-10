@@ -1,16 +1,26 @@
-# React + Vite
+# Policy
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Policy is an AI safety infrastructure tool that generates structured, auditable reasoning architectures for AI systems. Given a domain and use case, it produces a custom Python pipeline with embedded safety checkpoints at every reasoning step, making AI decision-making transparent, predictable, and controllable before deployment.
 
-Currently, two official plugins are available:
+## What it does
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+Policy takes a domain and use case as input and generates a custom reasoning pipeline — a structured Python architecture with safety checkpoints embedded at every step. The output includes a visual reasoning flow and downloadable production-ready code.
 
-## React Compiler
+## Why it matters
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+Most AI systems reason in a black box. Policy changes that by generating architectures that constrain and audit how AI thinks before it acts, making decision-making transparent, predictable, and safe across high-stakes domains like medicine, law, and finance.
 
-## Expanding the ESLint configuration
+## How it works
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+1. Describe your AI system's domain and use case
+2. Select a safety level and target model
+3. Policy generates a reasoning flow diagram and a Python pipeline
+4. Download and plug the pipeline directly into your AI system
+
+## Tech Stack
+
+React, Vite, Tailwind, FastAPI, NVIDIA NIM, Hugging Face Spaces, Vercel
+
+## Live
+
+https://policy-three-alpha.vercel.app
