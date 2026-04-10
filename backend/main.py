@@ -5,6 +5,7 @@ from pydantic import BaseModel
 import httpx
 import json
 import os
+import re
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -29,52 +30,59 @@ class GenerateRequest(BaseModel):
 
 @app.post("/generate")
 async def generate(req: GenerateRequest):
-    prompt = f"""You are an AI safety architect. Generate a structured reasoning architecture for an AI system.
+    steps_prompt = f"""You are an AI safety architect. Generate reasoning steps for an AI system.
+
+Domain: {req.domain}
+Use Case: {req.useCase}
+Safety Level: {req.safetyLevel}
+
+Respond ONLY with a valid JSON array of 4-6 steps. No other text, no markdown, no code blocks.
+Format exactly like this:
+[
+  {{"name": "Step Name", "description": "What this step does", "safety_check": true}},
+  {{"name": "Step Name", "description": "What this step does", "safety_check": false}}
+]"""
+
+    code_prompt = f"""You are an AI safety engineer. Write a Python class called ReasoningPipeline for:
 
 Domain: {req.domain}
 Use Case: {req.useCase}
 Safety Level: {req.safetyLevel}
 Target Model: {req.model}
 
-Respond ONLY with a JSON object in this exact format, no other text:
-{{
-  "steps": [
-    {{
-      "name": "Step name",
-      "description": "What this step does",
-      "safety_check": true or false
-    }}
-  ],
-  "code": "# Full Python reasoning pipeline code here as a string"
-}}
-
-The code should be a complete Python class called ReasoningPipeline with methods for each step, confidence scoring, and safety checkpoints. Make it production ready and well commented. Generate 4-6 steps."""
+Write a complete, well-commented Python class with methods for each reasoning step, confidence scoring, and safety checkpoints. Return ONLY the Python code, no explanation."""
 
     headers = {
         "Authorization": f"Bearer {NVIDIA_API_KEY}",
         "Content-Type": "application/json"
     }
 
-    payload = {
-        "model": "meta/llama-3.1-8b-instruct",
-        "messages": [{"role": "user", "content": prompt}],
-        "temperature": 0.3,
-        "max_tokens": 2000
-    }
-
     async with httpx.AsyncClient(timeout=60) as client:
-        res = await client.post(NVIDIA_URL, headers=headers, json=payload)
-        data = res.json()
+        # Get steps
+        steps_res = await client.post(NVIDIA_URL, headers=headers, json={
+            "model": "meta/llama-3.1-8b-instruct",
+            "messages": [{"role": "user", "content": steps_prompt}],
+            "temperature": 0.2,
+            "max_tokens": 800
+        })
+        steps_data = steps_res.json()
+        steps_raw = steps_data["choices"][0]["message"]["content"].strip()
+        
+        # Get code
+        code_res = await client.post(NVIDIA_URL, headers=headers, json={
+            "model": "meta/llama-3.1-8b-instruct",
+            "messages": [{"role": "user", "content": code_prompt}],
+            "temperature": 0.2,
+            "max_tokens": 1500
+        })
+        code_data = code_res.json()
+        code_raw = code_data["choices"][0]["message"]["content"].strip()
 
-    raw = data["choices"][0]["message"]["content"]
-    
-    # clean and parse JSON
-    raw = raw.strip()
-    if raw.startswith("```"):
-        raw = raw.split("```")[1]
-        if raw.startswith("json"):
-            raw = raw[4:]
-    raw = raw.strip()
-    
-    result = json.loads(raw)
-    return result
+    # Clean steps JSON
+    steps_raw = re.sub(r'```json|```', '', steps_raw).strip()
+    steps = json.loads(steps_raw)
+
+    # Clean code
+    code_raw = re.sub(r'```python|```', '', code_raw).strip()
+
+    return {"steps": steps, "code": code_raw}
