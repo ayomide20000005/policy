@@ -61,7 +61,7 @@ export default function App() {
       {/* HERO */}
       <section className="hero">
         <div className="container">
-          <div className="hero-tag">AI Safety Infrastructure</div>
+          <div className="hero-tag">POLICY - AI Safety Infrastructure</div>
           <h1>Generate reasoning<br /><span>architectures</span> for safer AI.</h1>
           <p className="hero-desc">
             Policy generates structured, auditable reasoning pipelines that constrain how AI systems think — making their decision process transparent, predictable, and safe.
@@ -221,7 +221,7 @@ export default function App() {
 
       <footer className="footer">
         <div className="container">
-          Policy — AI Safety Infrastructure · Built with NVIDIA NIM
+          Policy — AI Safety Infrastructure 
         </div>
       </footer>
     </>
