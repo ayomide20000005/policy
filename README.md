@@ -1,6 +1,6 @@
 # Policy
 
-Policy is an AI safety infrastructure tool that generates structured, auditable reasoning architectures for AI systems. Given a domain and use case, it produces a custom Python pipeline with embedded safety checkpoints at every reasoning step, making AI decision-making transparent, predictable, and controllable before deployment.
+Policy is an AI safety infrastructure tool that generates structured, auditable reasoning architectures for AI systems. Given a domain and use case, it produces a custom Python pipeline with embedded safety checkpoints at every reasoning step, making AI decision making transparent, predictable, and controllable before deployment.
 
 ## What it does
 
