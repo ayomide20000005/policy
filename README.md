@@ -19,7 +19,7 @@ Most AI systems reason in a black box. Policy changes that by generating archite
 
 ## Tech Stack
 
-React, Vite, Tailwind, FastAPI, NVIDIA NIM, Hugging Face Spaces, Vercel
+React, Vite, Tailwind, FastAPI, NVIDIA NIM, Hugging Face Spaces.
 
 ## Live
 
