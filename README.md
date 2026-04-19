@@ -12,7 +12,7 @@ Most AI systems reason in a black box. Policy changes that by generating archite
 
 ## How it works
 
-1. Describe your AI system's domain and use case
+1. Describe your AI system's domain and use cases
 2. Select a safety level and target model
 3. Policy generates a reasoning flow diagram and a Python pipeline
 4. Download and plug the pipeline directly into your AI system
